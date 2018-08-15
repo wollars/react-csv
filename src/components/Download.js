@@ -1,10 +1,11 @@
 import React from 'react';
-import {buildURI} from '../core';
+import {buildURI, toCSV} from '../core';
 import {
    defaultProps as commonDefaultProps,
    propTypes as commonPropTypes} from '../metaProps';
 const defaultProps = {
-  target: '_blank'
+  target: '_blank',
+  fileName: 'report.csv'
 };
 
 /**
@@ -31,9 +32,18 @@ class CSVDownload extends React.Component {
 
   componentDidMount(){
     const {data, headers, separator, uFEFF, target, specs, replace} = this.props;
-    this.state.page = window.open(
-        this.buildURI(data, uFEFF, headers, separator), target, specs, replace
-    );
+    
+    if (window.navigator.msSaveOrOpenBlob) {
+      
+      let blob = new Blob([toCSV(data, headers, separator)])
+      window.navigator.msSaveBlob(blob, filename)
+
+      return false
+    } else {
+      this.state.page = window.open(
+          this.buildURI(data, uFEFF, headers, separator), target, specs, replace
+      );
+    }
   }
 
   getWindow() {
