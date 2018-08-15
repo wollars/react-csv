@@ -65,7 +65,7 @@ var CSVDownload = function (_React$Component) {
 
       if (window.navigator.msSaveOrOpenBlob) {
 
-        var blob = new Blob([toCSV(data, headers, separator)]);
+        var blob = new Blob([(0, _core.toCSV)(data, headers, separator)]);
         window.navigator.msSaveBlob(blob, filename);
 
         return false;
